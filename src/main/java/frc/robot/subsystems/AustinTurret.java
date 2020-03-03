@@ -82,7 +82,7 @@ public class AustinTurret extends SingleMasterMotorSystem {
 	}
 
 	private enum SetPointState {
-		NORMAL, TO_POSITIVE_MAX, TO_NEGATIVE_MAX, LIMIT_TO_MAX, LIMIT_TO_MIN
+		NORMAL, TO_MAX, TO_MIN, LIMIT_AT_MAX, LIMIT_AT_MIN
 	}
 	
 	/**
@@ -91,9 +91,9 @@ public class AustinTurret extends SingleMasterMotorSystem {
 	private void setAngle(boolean isHoming) {
 		double current = getAngle();
 		double angle_drivebase = drive.getAngle();
-		double nonNormalizeDesire = angle_drivebase + angleOffset;
 
 		angle_drivebase = normalizeAngle(angle_drivebase);
+		double actualDesire = angle_drivebase + angleOffset;
 
 		if(prevState == TurretState.VISION) {
 			angleOffset = -(current - prevRelativePos + angle_drivebase);
@@ -103,7 +103,7 @@ public class AustinTurret extends SingleMasterMotorSystem {
 
 		double desire = normalizeAngle(angle_drivebase + angleOffset);
 		
-		if(isReachGoal(-current, desire, isHoming)) {
+		if(isReachGoal(current, desire, isHoming)) {
 			prevRelativePos = current;
 		}
 
@@ -114,48 +114,50 @@ public class AustinTurret extends SingleMasterMotorSystem {
 			setPointState = SetPointState.NORMAL;
 		}
 
-		if(setPointState == SetPointState.LIMIT_TO_MAX 
+		if(setPointState == SetPointState.LIMIT_AT_MAX 
 			&& desire >= Constants.kTurretMaxAngle ) {
 			desire = Constants.kTurretMaxAngle;
-		} else if(setPointState == SetPointState.LIMIT_TO_MIN  
-				&& desire <= Constants.kTurretMinAngle 
-				) {
+		} else if(setPointState == SetPointState.LIMIT_AT_MIN  
+				&& desire <= Constants.kTurretMinAngle) {
 			desire = Constants.kTurretMinAngle;
 		}
 
 		double goal = 0;
+
 		if(setPointState == SetPointState.NORMAL || 
-			setPointState == SetPointState.LIMIT_TO_MAX ||
-			setPointState == SetPointState.LIMIT_TO_MIN) {
-			goal = deadZoneLimit(desire, nonNormalizeDesire);
-		} else if(setPointState == SetPointState.TO_NEGATIVE_MAX) {
-			//System.out.println(-current + " --- -175");
+			setPointState == SetPointState.LIMIT_AT_MAX ||
+			setPointState == SetPointState.LIMIT_AT_MIN) {
+			goal = deadZoneLimit(desire, actualDesire);
+		} else if(setPointState == SetPointState.TO_MIN) {
+			//System.out.println(current + " --- -175");
 			goal = Constants.kTurretMinAngle;
-		} else if(setPointState == SetPointState.TO_POSITIVE_MAX) {
-			//System.out.println(-current + " --- 175");
+		} else if(setPointState == SetPointState.TO_MAX) {
+			//System.out.println(current + " --- 175");
 			goal = Constants.kTurretMaxAngle;
 		}
 
-		setOpenLoop(angleController.calculate(-current, goal));
-		isReachGoal(-current, goal, isHoming);
-		//System.out.println("SetPoint State: " + setPointState);
+		//System.out.println(current + " --- "+ goal);
+
+		setOpenLoop(angleController.calculate(current, goal));
+		isReachGoal(current, goal, isHoming);
 	}
 
 	private double deadZoneLimit(double desire, double actual_desire) {
+		//System.out.println("SetPoint State: " + setPointState);
 		//System.out.println(desire + " --- " + actual_desire);
 		if(desire >= Constants.kTurretMaxAngle) {
-			if(actual_desire >= 179.5) {
-				setPointState = SetPointState.TO_NEGATIVE_MAX;
+			if(actual_desire >= Constants.kTurretMaxMargin) {
+				setPointState = SetPointState.TO_MIN;
 				return Constants.kTurretMinAngle;
 			}
-			setPointState = SetPointState.LIMIT_TO_MAX;
+			setPointState = SetPointState.LIMIT_AT_MAX;
 			return Constants.kTurretMaxAngle;
 		} else if(desire <= Constants.kTurretMinAngle) {
-			if(actual_desire <= -179.5) {
-				setPointState = SetPointState.TO_POSITIVE_MAX;
+			if(actual_desire <= Constants.kTurretMinMargin) {
+				setPointState = SetPointState.TO_MAX;
 				return Constants.kTurretMaxAngle;
 			}
-			setPointState = SetPointState.LIMIT_TO_MIN;
+			setPointState = SetPointState.LIMIT_AT_MIN;
 			return Constants.kTurretMinAngle;
 		}
 
@@ -174,9 +176,7 @@ public class AustinTurret extends SingleMasterMotorSystem {
 				turretState = TurretState.SET_POINT;
 			}
 			//setOpenLoop(0.0);
-			if(setPointState != SetPointState.NORMAL
-			&& setPointState != SetPointState.LIMIT_TO_MAX
-			 && setPointState != SetPointState.LIMIT_TO_MIN) {
+			if(setPointState == SetPointState.TO_MAX || setPointState == SetPointState.TO_MIN) {
 				setPointState = SetPointState.NORMAL;
 			}
 		}
@@ -186,16 +186,16 @@ public class AustinTurret extends SingleMasterMotorSystem {
 
 	public boolean isReachGoal(double current, double desire) {
 		double diff = current - desire;
-		double targetError = Constants.TurretTargetError;
+		double targetError = Constants.kTurretErrorToleration;
 
 		if(turretState == TurretState.VISION) {
-			targetError = 0.01;
+			targetError = Constants.kTurretErrorTolerationVision;
 		}
 
-		if(setPointState == SetPointState.TO_NEGATIVE_MAX || 
-		setPointState == SetPointState.TO_POSITIVE_MAX) {
-			targetError = 2;
-		} 
+		if(setPointState == SetPointState.TO_MIN || 
+			setPointState == SetPointState.TO_MAX) {
+			targetError = Constants.kTurretErrorTolerationMaxMin;
+		}
 
 		if(Math.abs(diff) < targetError && current * desire >= 0) {
 			return true;
@@ -210,7 +210,7 @@ public class AustinTurret extends SingleMasterMotorSystem {
 
 	public void setToAngle(double current, double angle) {
 		System.out.println(current + " -- " +  angle);
-		pidGoal = angleController.calculate(-current, angle);
+		pidGoal = angleController.calculate(current, angle);
 		setOpenLoop(pidGoal);
 	}
 	

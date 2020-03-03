@@ -128,6 +128,7 @@ public class Robot extends TimedRobot {
       turret_.setState(TurretState.SET_POINT);
       turret_.resetControllers();
       limelight_.setLed(LedMode.OFF);
+      turret_.addAngleOffset(180);
     }catch(Throwable t){
         throw t;
     }
@@ -158,16 +159,16 @@ public class Robot extends TimedRobot {
       }
       
       if(resetTurretActivator.canBeActived(isHomeTurret, timestamp)) {
-        //turret_.setState(TurretState.HOMING);
+        turret_.setState(TurretState.HOMING);
       } else {
         if(autoAimming.canBeActived(isAutoAimming, timestamp)) {
-          //turret_.setState(TurretState.SET_POINT);
-          shooter_.setLowPosition();
+          turret_.setState(TurretState.SET_POINT);
+          //shooter_.setLowPosition();
           intake_.stop();
         } else {
-          //turret_.setState(TurretState.VISION);
+          turret_.setState(TurretState.VISION);
           intake_.setLowSpeed();
-          shooter_.setHighPosition();
+          //shooter_.setHighPosition();
         }
       }
 
@@ -221,8 +222,8 @@ public class Robot extends TimedRobot {
       autoModeChooser_.updateModeCreator(false);
       autoModeActivator_ = new AutoActivator();
 
-      //turret_.setState(TurretState.SET_POINT);
-      //turret_.resetControllers();
+      turret_.setState(TurretState.SET_POINT);
+      turret_.resetControllers();
       disabledCycler_.start_all();
     } catch (Throwable t) {
       throw t;

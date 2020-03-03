@@ -204,14 +204,17 @@ public class Constants {
     public static final int kIntakeBallBlockerId = 7;
     public static final double kIntakeHighSpeedPercentageIntake = 0.55;
     public static final double kIntakeHighSpeedPercentagePasser = 0.55;
-    public static final double kIntakeLowSpeedPercentageIntake = 0.25;
-    public static final double kIntakeLowSpeedPercentagePasser = 0.25;
-    public static final double kIntakeLowSpeedPercentagePasserInverse = -0.3;
-    public static final double kWantTurnReverseCurrent = 15;//in apms
-    public static final double kTurnReverseDuration = 1;//seconds
+    public static final double kIntakeHighSpeedPercentageUpper = 0.55;
+    public static final double kIntakeLowSpeedPercentageIntake = 0.15;//0.25
+    public static final double kIntakeLowSpeedPercentagePasser = 0.30;//0.5
+    public static final double kIntakeLowSpeedPercentageUpper = 0.25;
+    public static final double kIntakeLowSpeedPercentagePasserInverse = -0.2;
+    public static final double kWantTurnReverseCurrent = 25;//in apms
+    public static final double kTurnReverseDuration = 0.5;//seconds
 
     public static final int kIntakePasserId = 27;
     public static final int kIntakeFrontRollerId = 28;
+    public static final int kIntakeUpperId = 29;
     /*
     public static final SingleMasterMotorSystemConfig kIntake = new SingleMasterMotorSystemConfig();
     static {
@@ -301,11 +304,15 @@ public class Constants {
     public static final double kTurretFineTuneAngle = 10;
     public static final int kTurretLimitSwitch1 = -1;
     public static final int kTurretLimitSwitch2 = -1;
-	public static final double TurretTargetError = 0.5;
+	public static final double kTurretErrorToleration = 0.5;
+	public static final double kTurretErrorTolerationVision = 0.01;
+	public static final double kTurretErrorTolerationMaxMin = 4.5;
     public static final double kTurretMotorTeeth = 24;
     public static final double kTurrentTeeth = 165;
-    public static final double kTurretMaxAngle = 175;
-    public static final double kTurretMinAngle = -175;
+    public static final double kTurretMaxAngle = 225;
+    public static final double kTurretMinAngle = -65;
+    public static final double kTurretMaxMargin = 259.5;//259.5
+    public static final double kTurretMinMargin = -99.5;//
     public static final double kTurretRadius = 6;
 
     public static final double EncoderTicksPerRotation = 4096;
@@ -319,7 +326,7 @@ public class Constants {
 
         kTurret.kMasterConstants.id = 21;
         kTurret.kMasterConstants.invert_motor = false;
-        kTurret.kMasterConstants.invert_sensor_phase = false;
+        kTurret.kMasterConstants.invert_sensor_phase = true;
 
         kTurret.kSlaveConstants = new VictorSRXConstants[0];
 
@@ -360,7 +367,6 @@ public class Constants {
     public static final Color kGreenTarget = ColorMatch.makeColor(0.196, 0.557, 0.246);
     public static final Color kRedTarget = ColorMatch.makeColor(0.475, 0.371, 0.153);
     public static final Color kYellowTarget = ColorMatch.makeColor(0.293, 0.561, 0.144);
-    private ColorMatchResult matchedResult = new ColorMatchResult(Color.kBlack, 0);
 
     // Rev Color threshold
     // blue 0.143, 0.427, 0.429

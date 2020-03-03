@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.Servo;
 
 import frc.robot.Constants;
+import frc.lib.utility.Utility;
 
 public class DevineShooter extends SingleMasterMotorSystem {
     private static DevineShooter instance = new DevineShooter();
@@ -65,16 +66,16 @@ public class DevineShooter extends SingleMasterMotorSystem {
             return false;
         }
         if(shooterState == ShooterState.PERCENT_OUTPUT) {
-            return feedData_.feedforward == master_.getMotorOutputPercent();
+            return Utility.isReachSpeedShooter(master_.getMotorOutputPercent(), feedData_.feedforward);
         } else if(shooterState == ShooterState.VELOCITY) {
-            return feedData_.feedforward == master_.getSelectedSensorVelocity();
+            return Utility.isReachSpeedShooter(master_.getSelectedSensorVelocity(), feedData_.feedforward);
         }
 
         return false;
     }
 
     @Override
-    public void resetSensors() {
+    public synchronized void resetSensors() {
         setState(ShooterState.STOP);
         setLowPosition();
     }

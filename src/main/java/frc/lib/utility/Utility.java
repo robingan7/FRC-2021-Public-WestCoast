@@ -67,11 +67,21 @@ public class Utility {
 	/**
 	 * set angle range to -180 and 180
 	 */
-	public static double setAngleRange(double angleIn) {
-		if(angleIn > 180) {
+	public static double setAngleRange(double angleIn, double wrapAroundAngle) {
+		if(angleIn > wrapAroundAngle) {
 			return -(360 - angleIn);
-		} else if(angleIn < -180) {
+		} else if(angleIn < (wrapAroundAngle - 360)) {
 			return 360 + angleIn;
+		}
+
+		return angleIn;
+	}
+
+	public static double setAngleRange(double angleIn) {
+		if(angleIn < -100) {
+			return 360 + angleIn;
+		} else if(angleIn > 260) {
+			return -(360 - angleIn);
 		}
 
 		return angleIn;
@@ -79,5 +89,9 @@ public class Utility {
 
 	public static double meterToInch(double meters) {
 		return meters / 0.0254;
+	}
+
+	public static boolean isReachSpeedShooter(double current, double goal) {
+		return Math.abs(current - goal) < 0.1;
 	}
 }
