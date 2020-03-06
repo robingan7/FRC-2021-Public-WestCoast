@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.fasterxml.jackson.databind.deser.ContextualKeyDeserializer;
+import com.fasterxml.jackson.databind.node.ContainerNode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -31,9 +33,10 @@ public class LukeIntake extends Subsystem_Cycle {
     private Solenoid ballBlocker;
     private boolean forceClose;
     private double lastInverseTime;
-    private VictorSPX frontRoller;
+    private TalonSRX frontRoller;
     private TalonSRX passer;
-    private TalonSRX upper;
+    private VictorSPX upper;
+    private VictorSPX bottom;
 
     public static class FeedData {
         // INPUTS
@@ -49,6 +52,7 @@ public class LukeIntake extends Subsystem_Cycle {
         public double feedforwardFrontRoller;
         public double feedforwardPasser;
         public double feedforwardUpper;
+        public double feedforwardBottom;
     }
 
     private FeedData feedData_ = new FeedData();
@@ -61,9 +65,10 @@ public class LukeIntake extends Subsystem_Cycle {
         shooter = DevineShooter.getInstance();
         //ballBlocker = new Solenoid(Constants.kIntakeBallBlockerId);
         forceClose = true;
-        frontRoller = new VictorSPX(Constants.kIntakeFrontRollerId);
+        frontRoller = new TalonSRX(Constants.kIntakeFrontRollerId);
         passer = new TalonSRX(Constants.kIntakePasserId);
-        upper = new TalonSRX(Constants.kIntakeUpperId);
+        upper = new VictorSPX(Constants.kIntakeUpperId);
+        bottom = new VictorSPX(Constants.kIntakeBottomId);
     }
 
     public synchronized IntakeState getState() {
@@ -86,19 +91,7 @@ public class LukeIntake extends Subsystem_Cycle {
         }
     }
 
-    public synchronized void setHighSpeed() {
-        if(shooter.canShoot()) {
-            setOpenLoop(Constants.kIntakeHighSpeedPercentageIntake, Constants.kIntakeHighSpeedPercentagePasser, Constants.kIntakeHighSpeedPercentageUpper);
-        } else {
-            setLowSpeed();
-        }
-    }
-
-    public synchronized void setLowSpeed() {
-        setOpenLoop(Constants.kIntakeLowSpeedPercentageIntake, Constants.kIntakeLowSpeedPercentagePasser, Constants.kIntakeLowSpeedPercentageUpper);
-    }
-
-    public synchronized void setOpenLoop(double percentageRoller, double percentagePasser, double percentageUpper) {
+    public synchronized void setOpenLoop(double percentageRoller, double percentagePasser, double percentageUpper, double percentageBottom) {
         if(intakeState != IntakeState.PERCENT_OUTPUT) {
             intakeState = IntakeState.PERCENT_OUTPUT;
         }
@@ -106,8 +99,67 @@ public class LukeIntake extends Subsystem_Cycle {
         feedData_.feedforwardFrontRoller = percentageRoller;
         feedData_.feedforwardPasser = percentagePasser;
         feedData_.feedforwardUpper = percentageUpper;
+        feedData_.feedforwardBottom = percentageBottom;
     }
 
+    public synchronized void controlIntake(double joystick, boolean isRervsePasser) {
+        double rollerInput = 0;
+        double upperInput = 0;
+        double passerInput = isRervsePasser ? Constants.kIntakePercentagePasserInverse : Constants.kIntakePercentagePasser;
+        double bottomInput = 0;
+
+        if(joystick > Constants.kIntakeJoystickDeadband) {
+            if(joystick >= Constants.kIntakePercentageMaxUpper) {
+                upperInput = Constants.kIntakePercentageMaxUpper;
+            } else {
+                upperInput = joystick;
+            }
+            
+            bottomInput = Constants.kIntakePercentageMaxBottom;
+            rollerInput = Constants.kIntakePercentageIntake;
+            
+        } else if(joystick < -Constants.kIntakeJoystickDeadband) {
+            upperInput = Constants.kIntakePercentageMaxUpperInverse;
+            bottomInput = Constants.kIntakePercentageMaxBottomInverse;
+            passerInput = Constants.kIntakePercentagePasserInverse;
+        }
+
+        if(joystick <= Constants.kIntakeJoystickDeadband && joystick >= -Constants.kIntakeJoystickDeadband) {
+            passerInput = 0;
+        }
+
+        setOpenLoop(rollerInput, passerInput, upperInput, bottomInput);
+    }
+
+    public synchronized void reverseIntakeInAuto() {
+        controlIntake(-0.4, false);
+    }
+
+    public synchronized void intakeInAuto() {
+        controlIntake(0.4, false);
+    }
+
+    private void passerCurrentLimit() {
+        if(isInversePasser) {
+            if((Timer.getFPGATimestamp() - lastInverseTime) > Constants.kTurnReverseDuration) {
+                isInversePasser = false;
+                passer.set(ControlMode.PercentOutput, -feedData_.feedforwardPasser * inverse);
+            } else {
+                passer.set(ControlMode.PercentOutput, -Constants.kIntakePercentagePasserInverse);
+            }
+        } else {
+            if(-passer.getStatorCurrent() > Constants.kWantTurnReverseCurrent) {
+                isInversePasser = true;
+                passer.set(ControlMode.PercentOutput, -Constants.kIntakePercentagePasserInverse);
+                lastInverseTime = Timer.getFPGATimestamp();
+            } else {
+                isInversePasser = false;
+                passer.set(ControlMode.PercentOutput, -feedData_.feedforwardPasser * inverse);
+            }
+        }
+    }
+
+    
     @Override
     public synchronized void resetSensors() {
         setState(IntakeState.STOP);
@@ -119,42 +171,30 @@ public class LukeIntake extends Subsystem_Cycle {
         feedData_.feedforwardFrontRoller = 0.0;
         feedData_.feedforwardPasser = 0.0;
         feedData_.feedforwardUpper = 0.0;
+        feedData_.feedforwardBottom = 0.0;
     }
 
     @Override
     public synchronized void move_subsystem() {
+        //System.out.println("in " + frontRoller.getMotorOutputPercent());
         if(intakeState == IntakeState.PERCENT_OUTPUT) {
             frontRoller.set(ControlMode.PercentOutput, -feedData_.feedforwardFrontRoller * inverse);
-            upper.set(ControlMode.PercentOutput, -feedData_.feedforwardUpper * inverse);
-
-            if(isInversePasser) {
-                if((Timer.getFPGATimestamp() - lastInverseTime) > Constants.kTurnReverseDuration) {
-                    isInversePasser = false;
-                    passer.set(ControlMode.PercentOutput, -feedData_.feedforwardPasser * inverse);
-                } else {
-                    passer.set(ControlMode.PercentOutput, -Constants.kIntakeLowSpeedPercentagePasserInverse);
-                }
-            } else {
-                if(-passer.getStatorCurrent() > Constants.kWantTurnReverseCurrent) {
-                    isInversePasser = true;
-                    passer.set(ControlMode.PercentOutput, -Constants.kIntakeLowSpeedPercentagePasserInverse);
-                    lastInverseTime = Timer.getFPGATimestamp();
-                } else {
-                    isInversePasser = false;
-                    passer.set(ControlMode.PercentOutput, -feedData_.feedforwardPasser * inverse);
-                }
-            }
-
+            upper.set(ControlMode.PercentOutput, feedData_.feedforwardUpper * inverse);
+            bottom.set(ControlMode.PercentOutput, feedData_.feedforwardBottom * inverse);
+            passerCurrentLimit();
         } else {
             passer.set(ControlMode.PercentOutput, 0.0);
             upper.set(ControlMode.PercentOutput, 0.0);
             frontRoller.set(ControlMode.PercentOutput, 0.0);
+            bottom.set(ControlMode.PercentOutput, 0.0);
         }
         //ballBlocker.set(!shooter.canShoot() && !forceClose);
     }
 
     @Override
     public void sendDataToSmartDashboard() {
-        SmartDashboard.putNumber("Intake percent current", passer.getStatorCurrent());
+        SmartDashboard.putNumber("Passer current", passer.getStatorCurrent());
+        SmartDashboard.putNumber("Roller current", frontRoller.getStatorCurrent());
     }
+
 }

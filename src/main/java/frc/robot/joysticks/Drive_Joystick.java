@@ -24,50 +24,32 @@ public class Drive_Joystick implements IDrive_Joystick {
 
     @Override
     public double getTurn(){
-        return mDriverJoystick.getRawAxis(4);
-    }
-
-    public boolean isActivePanelControl() {
-        return mDriverJoystick.getRawButton(1);
-    }
-
-    public boolean isKillPanelControl() {
-        return mDriverJoystick.getRawButton(2);
+        return mDriverJoystick.getRawAxis(4);//4 for xbox 2 for ps4
     }
 
     @Override
     public double getHDriveRight() {
-        return mDriverJoystick.getRawAxis(3);
+        return mDriverJoystick.getRawAxis(3);//3 for xbox 4 for ps4
     }
 
     @Override
     public double getHDriveLeft() {
-        return -mDriverJoystick.getRawAxis(2);
+        return -mDriverJoystick.getRawAxis(2);//2 for xbox 3 for ps4
     }
 
     @Override
     public boolean isAutoAimming() {
-        return mDriverJoystick.getRawButton(3);
+        return mDriverJoystick.getRawButton(6);//3 for xbox
     }
 
     @Override
-    public boolean isHomeTurret() {
-        return mDriverJoystick.getRawButton(7);
+    public boolean isSwitchHood() {
+        return mDriverJoystick.getRawButton(5);
     }
 
     @Override
-    public boolean isAutoSteering() {
-        return mDriverJoystick.getRawButton(6);
-    }
-
-    @Override
-    public boolean isTurretMoveRight() {
-        return mDriverJoystick.getPOV(0) == 90;
-    }
-
-    @Override
-    public boolean isTurretMoveLeft() {
-        return mDriverJoystick.getPOV(0) == 270;
+    public double getHDrive() {
+        return mDriverJoystick.getRawAxis(0);
     }
 
 }

@@ -8,6 +8,7 @@ import frc.robot.Constants;
 import frc.robot.cycles.Subsystem_Cycle;
 import frc.robot.cycles.Cycle;
 import frc.robot.cycles.ICycle_in;
+import frc.lib.other.LEDSignal;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -103,18 +104,6 @@ public class LEDController extends Subsystem_Cycle {
     @Override
     public synchronized void resetSensors() {
         canifier_.setQuadraturePosition(0, 0);
-    }
-
-    public static class LEDSignal {
-        public double r_;
-        public double g_;
-        public double b_;
-
-        public LEDSignal(double r, double g, double b) {
-            r_ = r;
-            g_ = g;
-            b_ = b;
-        }
     }
 
     @Override

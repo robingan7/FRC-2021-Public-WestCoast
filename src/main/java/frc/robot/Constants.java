@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.I2C;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorMatch;
 
-import frc.robot.subsystems.LEDController.LEDSignal;
+import frc.lib.other.LEDSignal;
 
 public class Constants {
 
@@ -200,21 +200,28 @@ public class Constants {
     }*/
 
     // Intake
-    public static final double kIntakeRollerSpeed = 0.7;
     public static final int kIntakeBallBlockerId = 7;
-    public static final double kIntakeHighSpeedPercentageIntake = 0.55;
-    public static final double kIntakeHighSpeedPercentagePasser = 0.55;
-    public static final double kIntakeHighSpeedPercentageUpper = 0.55;
-    public static final double kIntakeLowSpeedPercentageIntake = 0.15;//0.25
-    public static final double kIntakeLowSpeedPercentagePasser = 0.30;//0.5
-    public static final double kIntakeLowSpeedPercentageUpper = 0.25;
-    public static final double kIntakeLowSpeedPercentagePasserInverse = -0.2;
-    public static final double kWantTurnReverseCurrent = 25;//in apms
+
+    public static final double kIntakePercentageIntake = 0.25;
+    public static final double kIntakePercentagePasser = 0.35;
+    public static final double kIntakePercentageMaxUpper = 0.25;
+    public static final double kIntakePercentageMaxBottom = 0.25;
+
+    public static final double kIntakePercentageMaxUpperInverse = -0.2;
+    public static final double kIntakePercentageMaxBottomInverse = -0.2;
+    public static final double kIntakePercentagePasserInverse = -0.1;
+    public static final double kIntakePercentageRollerInverse = -0.2;
+
+    public static final double kWantTurnReverseCurrent = 30;//in apms
     public static final double kTurnReverseDuration = 0.5;//seconds
 
+    public static final double kIntakeJoystickDeadband = 0.15;
+
     public static final int kIntakePasserId = 27;
-    public static final int kIntakeFrontRollerId = 28;
-    public static final int kIntakeUpperId = 29;
+    public static final int kIntakeFrontRollerId = 29;
+    public static final int kIntakeUpperId = 28;
+    public static final int kIntakeBottomId = 30;
+
     /*
     public static final SingleMasterMotorSystemConfig kIntake = new SingleMasterMotorSystemConfig();
     static {
@@ -254,9 +261,10 @@ public class Constants {
     }*/
 
     // Shooter
-    public static final double kAutoShootingDuration = 1;
-    public static final double kAutoShootingPercentage = 0.5;
-    public static final int kShooterServoId = 8;
+    public static final double kAutoShootingDuration = 3;
+    public static final double kShooterReverseSpeed = -0.6;
+    public static final double kAutoShootingPercentage = 0.7;
+    public static final int kShooterServoId = 0;
     public static double kMaxServoAngle = 0.95;
     public static double kMinServoAngle = 0.5;
     public static final SingleMasterMotorSystemConfig kShooter = new SingleMasterMotorSystemConfig();
@@ -330,8 +338,8 @@ public class Constants {
 
         kTurret.kSlaveConstants = new VictorSRXConstants[0];
 
-        kTurret.kKp = 0.02;
-        kTurret.kKi = 0.00001;
+        kTurret.kKp = 0.006;
+        kTurret.kKi = 0.00002;
         kTurret.kKd = 0.0015;
         kTurret.kKf = 0;
         kTurret.kKa = 0.0;

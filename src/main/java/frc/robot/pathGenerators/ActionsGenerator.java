@@ -46,8 +46,8 @@ public class ActionsGenerator {
                                     true);
 
                 forwardAction = new ParallelAction(Arrays.asList(
-                    drive_forward_path
-                    //new LambdaAction(() -> LukeIntake.getInstance().setHighSpeed())
+                    drive_forward_path,
+                    new LambdaAction(() -> LukeIntake.getInstance().intakeInAuto())
                 ));
 
                 backAction = new ParallelAction(Arrays.asList(
@@ -64,14 +64,14 @@ public class ActionsGenerator {
                                     true);
 
                 forwardAction = new ParallelAction(Arrays.asList(
-                    drive_forward_path
-                    //new LambdaAction(() -> LukeIntake.getInstance().setMiddleSpeed())
+                    drive_forward_path,
+                    new LambdaAction(() -> LukeIntake.getInstance().intakeInAuto())
                 ));
 
                 backAction = new ParallelAction(Arrays.asList(
                     drive_back_path,
                     new SeriesAction(Arrays.asList(
-                        //new LambdaAction(() -> LukeIntake.getInstance().setMiddleSpeed()), 
+                        new LambdaAction(() -> LukeIntake.getInstance().intakeInAuto()), 
                         new DelayAction(0.2),
                         new GetReadyToShootAction()))
                 ));
@@ -85,14 +85,14 @@ public class ActionsGenerator {
                                     true);
 
                 forwardAction = new ParallelAction(Arrays.asList(
-                    drive_forward_path
-                    //new LambdaAction(() -> LukeIntake.getInstance().setMiddleSpeed())
+                    drive_forward_path,
+                    new LambdaAction(() -> LukeIntake.getInstance().intakeInAuto())
                 ));
 
                 backAction = new ParallelAction(Arrays.asList(
                     drive_back_path,
                     new SeriesAction(Arrays.asList(
-                        //new LambdaAction(() -> LukeIntake.getInstance().setMiddleSpeed()), 
+                        new LambdaAction(() -> LukeIntake.getInstance().intakeInAuto()), 
                         new DelayAction(0.2),
                         new GetReadyToShootAction()))
                 ));
@@ -240,7 +240,7 @@ public class ActionsGenerator {
                     new GetReadyToShootAction()));
         } else {
             shoots = new SeriesAction(Arrays.asList(
-                   /*new LambdaAction(() -> LukeIntake.getInstance().setHighSpeed())*/));
+                new LambdaAction(() -> LukeIntake.getInstance().intakeInAuto())));
         }
         
         return new ParallelAction(Arrays.asList(drives, shoots));

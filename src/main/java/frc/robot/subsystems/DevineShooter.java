@@ -29,7 +29,19 @@ public class DevineShooter extends SingleMasterMotorSystem {
         super(Constants.kShooter);
 		angleChanger = new Servo(Constants.kShooterServoId);
         shooterState = ShooterState.STOP;
-        setLowPosition();
+        setHighPosition();
+    }
+
+    public synchronized void switchHood() {
+        if(angleChanger.get() == Constants.kMaxServoAngle) {
+            setLowPosition();
+        } else if(angleChanger.get() == Constants.kMinServoAngle) {
+            setHighPosition();
+        }
+    }
+
+    public synchronized void reverse() {
+        setOpenLoop(Constants.kShooterReverseSpeed);
     }
 
     public synchronized ShooterState getShooterState() {
@@ -118,5 +130,6 @@ public class DevineShooter extends SingleMasterMotorSystem {
     public void sendDataToSmartDashboard() {
         SmartDashboard.putNumber("Shooter tick", master_.getSelectedSensorPosition());
         SmartDashboard.putNumber("Shooter output", master_.getMotorOutputPercent());
+        SmartDashboard.putNumber("Shooter Servo", angleChanger.get());
     }
 }

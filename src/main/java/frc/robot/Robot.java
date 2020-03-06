@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
   private final XitingJinClimber climber_ = XitingJinClimber.getInstance();
   private final AustinTurret turret_ = AustinTurret.getInstance();
   private final Limelight limelight_ = Limelight.getInstance();
-  private final LEDController ledController_ = LEDController.getInstance();
+  //private final LEDController ledController_ = LEDController.getInstance();
   private final Subsystem_Cycle_Manager subsystem_Cycle_Manager_ = new Subsystem_Cycle_Manager(
     Arrays.asList(
       drivebase_,
@@ -48,7 +48,7 @@ public class Robot extends TimedRobot {
       climber_,
       /*wheelOfFortune_,
       */
-      ledController_,
+      //ledController_,
       limelight_
     )
   );
@@ -58,7 +58,8 @@ public class Robot extends TimedRobot {
   private DelayBoolean resetTurretActivator = new DelayBoolean();
   private DelayBoolean turretMoveRightActivator = new DelayBoolean();
   private DelayBoolean turretMoveLeftActivator = new DelayBoolean();
-  private LatchDelayBoolean autoAimming = new LatchDelayBoolean();
+  //private LatchDelayBoolean switchHood = new LatchDelayBoolean();
+  private DelayBoolean switchHood = new DelayBoolean();
   private AutoChooser autoModeChooser_ = new AutoChooser();
   private AutoActivator autoModeActivator_;
   
@@ -70,6 +71,7 @@ public class Robot extends TimedRobot {
       climber_.resetSensors();
       shooter_.resetSensors(); 
       intake_.resetSensors();
+      //turret_.resetSensors(); //TODO:PUT THIS BACK!!!
       subsystem_Cycle_Manager_.registerEnabledCycles(enabledCycler_);
       subsystem_Cycle_Manager_.registerDisabledLoops(disabledCycler_);
       limelight_.setLed(LedMode.OFF);
@@ -128,7 +130,7 @@ public class Robot extends TimedRobot {
       turret_.setState(TurretState.SET_POINT);
       turret_.resetControllers();
       limelight_.setLed(LedMode.OFF);
-      turret_.addAngleOffset(180);
+      //turret_.addAngleOffset(180);
     }catch(Throwable t){
         throw t;
     }
@@ -137,17 +139,20 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     try{
-      
       double timestamp = Timer.getFPGATimestamp();
       double speed = controlBoard_.getSpeed();
       double turn = controlBoard_.getTurn();
       double hDrive = controlBoard_.getHDriveLeft() + controlBoard_.getHDriveRight();
+      double hDriveAxis = controlBoard_.getHDrive();
       boolean isActiveCP = controlBoard_.isActivePanelControl();
       boolean isKillCP = controlBoard_.isKillPanelControl();
       boolean isAutoAimming = controlBoard_.isAutoAimming();
       boolean isHomeTurret = controlBoard_.isHomeTurret();
       boolean isTurretMoveRight = controlBoard_.isTurretMoveRight();
       boolean isTurretMoveLeft = controlBoard_.isTurretMoveLeft();
+      double intakeControl = -controlBoard_.getIntake();
+      boolean isReversePasser = controlBoard_.isReversePasser();
+      boolean isSwitchHood = controlBoard_.isSwitchHood();
 
       if(startCPActivator.canBeActived(isActiveCP, timestamp)) {
         autoModeChooser_.updateModeCreator(true);
@@ -161,26 +166,31 @@ public class Robot extends TimedRobot {
       if(resetTurretActivator.canBeActived(isHomeTurret, timestamp)) {
         turret_.setState(TurretState.HOMING);
       } else {
-        if(autoAimming.canBeActived(isAutoAimming, timestamp)) {
-          turret_.setState(TurretState.SET_POINT);
-          //shooter_.setLowPosition();
-          intake_.stop();
+        if(intakeControl > -Constants.kIntakeJoystickDeadband) {
+          if(isAutoAimming) {
+            turret_.setState(TurretState.VISION);
+            shooter_.shootInAuto();
+          } else {
+            turret_.setState(TurretState.SET_POINT);
+            shooter_.stop();
+          }
         } else {
-          turret_.setState(TurretState.VISION);
-          intake_.setLowSpeed();
-          //shooter_.setHighPosition();
+          shooter_.reverse();
         }
       }
 
-      if(turretMoveRightActivator.canBeActived(isTurretMoveRight, timestamp)) {
-        //turret_.addAngleOffset(Constants.kTurretFineTuneAngle);
-      } else if(turretMoveLeftActivator.canBeActived(isTurretMoveLeft, timestamp)) {
-        //turret_.addAngleOffset(-Constants.kTurretFineTuneAngle);
+      if(switchHood.canBeActived(isSwitchHood, timestamp)) {
+        shooter_.switchHood();
       }
-      
-      
-      shooter_.setOpenLoop(hDrive * 0.5);
-      drivebase_.arcadeDrive(-speed, turn, hDrive);
+
+      if(turretMoveRightActivator.canBeActived(isTurretMoveRight, timestamp)) {
+        turret_.addAngleOffset(Constants.kTurretFineTuneAngle);
+      } else if(turretMoveLeftActivator.canBeActived(isTurretMoveLeft, timestamp)) {
+        turret_.addAngleOffset(-Constants.kTurretFineTuneAngle);
+      }
+
+      drivebase_.arcadeDrive(-speed, turn, hDriveAxis);
+      intake_.controlIntake(intakeControl, isReversePasser);
     }catch(Throwable t){
       throw t;
     }
@@ -223,7 +233,6 @@ public class Robot extends TimedRobot {
       autoModeActivator_ = new AutoActivator();
 
       turret_.setState(TurretState.SET_POINT);
-      turret_.resetControllers();
       disabledCycler_.start_all();
     } catch (Throwable t) {
       throw t;

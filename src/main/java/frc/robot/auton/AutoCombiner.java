@@ -24,7 +24,8 @@ public class AutoCombiner extends AutoOptionBase {
 
     @Override
     protected void routine() throws AutoEndEarlyException {
-        //LukeIntake.getInstance().setHighSpeed();
+        LukeIntake.getInstance().intakeInAuto();
+        AustinTurret.getInstance().addAngleOffset(180);
         runAction(firstActions[0]);
 
         if(beforeFirstShootSelected == BeforeFirstShoot.TWO_ON_OPPO_TRENCH 

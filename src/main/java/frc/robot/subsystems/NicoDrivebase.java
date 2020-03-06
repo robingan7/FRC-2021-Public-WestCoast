@@ -15,7 +15,7 @@ import frc.lib.utility.DriveSignal;
 import frc.lib.motor.MotorUtility;
 import frc.lib.math.Translation2d;
 import frc.lib.control.SynchronousPIDController;
-import frc.robot.subsystems.LEDController;
+import frc.lib.utility.SM_HDrive;
 
 import com.ctre.phoenix.Util;
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -93,7 +93,6 @@ public class NicoDrivebase extends Subsystem_Cycle {
 	private Rotation wantedHeading;
 	private volatile double driveMultiplier;
 	private Limelight limelight_ = Limelight.getInstance();
-	private LEDController ledController = LEDController.getInstance();
 	private SynchronousPIDController middleWheelController;
 
 	private final Cycle cycle = new Cycle() {
@@ -292,9 +291,10 @@ public class NicoDrivebase extends Subsystem_Cycle {
 	}
 
 	public void arcadeDrive(double moveValue, double rotateValue, double middle) {
-		arcadeDrive(moveValue, rotateValue);
+		double[] drive_values = SM_HDrive.getHDriveOutput(moveValue, middle);
+		arcadeDrive(drive_values[0], rotateValue);
 
-		feedData_.middle_feedforward = filterHDrive(middle);
+		feedData_.middle_feedforward = filterHDrive(drive_values[1]);
 	}
 
 	private void configMotors() {
@@ -468,30 +468,15 @@ public class NicoDrivebase extends Subsystem_Cycle {
 	}
 
 	public double filterHDrive(double input) {
-		if(Math.abs(input) > 0.2) {
+		if(Math.abs(input) > 0.15) {
 			return input;
 		}
 
 		return 0;
 	}
 
-	public synchronized void setLed() {
-		if(feedData_.middle_feedforward == 0) {
-			if(feedData_.left_feedforward > feedData_.right_feedforward) {
-				ledController.setLEDColor(Constants.kIntakeIntakingCargo);
-			} else if(feedData_.left_feedforward < feedData_.right_feedforward) {
-				ledController.setLEDColor(Constants.kIntakeIntakingDisk);
-			} else {
-				ledController.setLEDColor(Constants.kHanging);
-			}
-		} else {
-			ledController.setLEDColor(Constants.kIntakeExhuasting);
-		}
-	}
-
 	@Override
 	public synchronized void move_subsystem() {
-		setLed();
 		//System.out.println(feedData_.left_feedforward + " ----- " + feedData_.right_feedforward);
 		if(driveState == DriveState.PUREPURSUIT || driveState == DriveState.TURN) {
 			leftMasterTalon.set(ControlMode.Velocity, feedData_.left_feedforward);
@@ -567,6 +552,11 @@ public class NicoDrivebase extends Subsystem_Cycle {
 		
 		SmartDashboard.putNumber("Left Percent", leftMasterTalon.getMotorOutputPercent());
 		SmartDashboard.putNumber("Right Percent", rightMasterTalon.getMotorOutputPercent());
+		SmartDashboard.putNumber("Middle Percent", middleWheel.getMotorOutputPercent());
+
+		SmartDashboard.putNumber("Left Velocity", leftMasterTalon.getSelectedSensorVelocity());
+		SmartDashboard.putNumber("Right Velocity", rightMasterTalon.getSelectedSensorVelocity());
+		SmartDashboard.putNumber("Middle Velocity", middleWheel.getSelectedSensorVelocity());
 	}
 	
 	public synchronized boolean isFinished() {

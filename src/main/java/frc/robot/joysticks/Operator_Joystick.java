@@ -23,4 +23,43 @@ public class Operator_Joystick implements IOperator_Joystick{
     public boolean isKillPanelControl() {
         return mOperatorJoystick.getRawButton(2);
     }
+
+    @Override
+    public boolean isHomeTurret() {
+        return mOperatorJoystick.getRawButton(7);
+    }
+
+    @Override
+    public boolean isAutoSteering() {
+        return mOperatorJoystick.getRawButton(6);
+    }
+
+    @Override
+    public boolean isTurretMoveRight() {
+        return mOperatorJoystick.getPOV(0) == 90;
+    }
+
+    @Override
+    public boolean isTurretMoveLeft() {
+        return mOperatorJoystick.getPOV(0) == 270;
+    }
+
+    @Override
+    public double getElevator() {
+        return mOperatorJoystick.getRawAxis(5);
+    }
+
+    @Override
+    public double getIntake() {
+        return mOperatorJoystick.getRawAxis(1);
+    }
+
+    @Override
+    public boolean isReversePasser() {
+        return mOperatorJoystick.getRawButton(6);
+    }
+
+    public boolean isAutoAimming() {
+        return mOperatorJoystick.getRawButton(6);//3 for xbox
+    }
 }

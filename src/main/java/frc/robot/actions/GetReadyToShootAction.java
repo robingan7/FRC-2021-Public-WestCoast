@@ -7,9 +7,8 @@ public class GetReadyToShootAction extends RunOnceAction {
 
     @Override
     public void runOnce() {
-        /*LukeIntake.getInstance().setForceClose(true); 
-        LukeIntake.getInstance().setHighSpeed();
-        DevineShooter.getInstance().shootInAuto();*/
+        DevineShooter.getInstance().reverse();
+        LukeIntake.getInstance().reverseIntakeInAuto();
     }
 
 }

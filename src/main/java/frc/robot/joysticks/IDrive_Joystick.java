@@ -8,21 +8,13 @@ public interface IDrive_Joystick{
 
     double getTurn();
 
+    double getHDrive();
+
     double getHDriveRight();
 
     double getHDriveLeft();
 
-    boolean isActivePanelControl();
-
-    boolean isKillPanelControl();
-
     boolean isAutoAimming();
 
-    boolean isHomeTurret();
-
-    boolean isAutoSteering();
-
-    boolean isTurretMoveRight();
-
-    boolean isTurretMoveLeft();
+    boolean isSwitchHood();
 }

@@ -33,37 +33,42 @@ public class MainControlBoard implements IMainControlBoard{
 
     @Override
     public boolean isActivePanelControl() {
-        return mDrive_Joystick.isActivePanelControl();
+        return mIOperator_Joystick.isActivePanelControl();
     }
 
     @Override
     public boolean isKillPanelControl() {
-        return mDrive_Joystick.isActivePanelControl();
+        return mIOperator_Joystick.isActivePanelControl();
     }
 
     @Override
     public boolean isAutoAimming() {
-        return mDrive_Joystick.isAutoAimming();
+        return mIOperator_Joystick.isAutoAimming();
     }
 
     @Override
     public boolean isHomeTurret() {
-        return mDrive_Joystick.isHomeTurret();
+        return mIOperator_Joystick.isHomeTurret();
     }
 
     @Override
     public boolean isAutoSteering() {
-        return mDrive_Joystick.isAutoSteering();
+        return mIOperator_Joystick.isAutoSteering();
     }
 
     @Override
     public boolean isTurretMoveRight() {
-        return mDrive_Joystick.isTurretMoveRight();
+        return mIOperator_Joystick.isTurretMoveRight();
     }
 
     @Override
     public boolean isTurretMoveLeft() {
-        return mDrive_Joystick.isTurretMoveLeft();
+        return mIOperator_Joystick.isTurretMoveLeft();
+    }
+
+    @Override
+    public double getHDrive() {
+        return mDrive_Joystick.getHDrive();
     }
 
     @Override
@@ -76,4 +81,23 @@ public class MainControlBoard implements IMainControlBoard{
         return mDrive_Joystick.getHDriveLeft();
     }
 
+    @Override
+    public double getElevator() {
+        return mIOperator_Joystick.getElevator();
+    }
+
+    @Override
+    public double getIntake() {
+        return mIOperator_Joystick.getIntake();
+    }
+
+    @Override
+    public boolean isReversePasser() {
+        return mIOperator_Joystick.isReversePasser();
+    }
+
+    @Override
+    public boolean isSwitchHood() {
+        return mDrive_Joystick.isSwitchHood();
+    }
 }
