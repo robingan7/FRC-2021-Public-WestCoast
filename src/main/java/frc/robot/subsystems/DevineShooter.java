@@ -56,6 +56,13 @@ public class DevineShooter extends SingleMasterMotorSystem {
         setOpenLoop(Constants.kAutoShootingPercentage);
     }
 
+    public synchronized void shootinA() {
+        setOpenLoop(0.75);
+    }
+    public synchronized void shootInLowSpeed() {
+        setOpenLoop(0.4);
+    }
+
     public synchronized double getVal() {
         if(shooterState == ShooterState.PERCENT_OUTPUT) {
             master_.getStatorCurrent();
@@ -80,7 +87,8 @@ public class DevineShooter extends SingleMasterMotorSystem {
         if(shooterState == ShooterState.PERCENT_OUTPUT) {
             return Utility.isReachSpeedShooter(master_.getMotorOutputPercent(), feedData_.feedforward);
         } else if(shooterState == ShooterState.VELOCITY) {
-            return Utility.isReachSpeedShooter(master_.getSelectedSensorVelocity(), feedData_.feedforward);
+            //return Utility.isReachSpeedShooter(master_.getSelectedSensorVelocity(), feedData_.feedforward);
+            return true;
         }
 
         return false;
@@ -128,7 +136,6 @@ public class DevineShooter extends SingleMasterMotorSystem {
 
     @Override
     public void sendDataToSmartDashboard() {
-        SmartDashboard.putNumber("Shooter tick", master_.getSelectedSensorPosition());
         SmartDashboard.putNumber("Shooter output", master_.getMotorOutputPercent());
         SmartDashboard.putNumber("Shooter Servo", angleChanger.get());
     }

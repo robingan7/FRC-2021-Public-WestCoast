@@ -94,4 +94,9 @@ public class Utility {
 	public static boolean isReachSpeedShooter(double current, double goal) {
 		return Math.abs(current - goal) < 0.1;
 	}
+
+	public static boolean isCloseEnough(double valueIn, double targetValue, double tolerate) {
+		return Math.abs(targetValue - valueIn) < tolerate;
+	}
+
 }

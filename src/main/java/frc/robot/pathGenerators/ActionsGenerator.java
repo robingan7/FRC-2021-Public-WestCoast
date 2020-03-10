@@ -1,6 +1,7 @@
 package frc.robot.pathGenerators;
 
 import frc.lib.control.Path;
+import frc.lib.math.Rotation;
 import frc.lib.math.Translation2d;
 import frc.robot.WayPoints;
 import frc.robot.actions.Action;
@@ -34,7 +35,7 @@ public class ActionsGenerator {
         currentIndex = 0;
         resetActions();
         DrivePathAction drive_forward_path, drive_back_path;
-        ParallelAction forwardAction = new ParallelAction(Arrays.asList(new DoNothingAction()));
+        Action forwardAction = new ParallelAction(Arrays.asList(new DoNothingAction()));
         ParallelAction backAction = new ParallelAction(Arrays.asList(new DoNothingAction()));
 
         switch(selected) {
@@ -47,12 +48,14 @@ public class ActionsGenerator {
 
                 forwardAction = new ParallelAction(Arrays.asList(
                     drive_forward_path,
-                    new LambdaAction(() -> LukeIntake.getInstance().intakeInAuto())
+                    new SeriesAction(Arrays.asList(new DelayAction(0.15), 
+                    new LambdaAction(() -> LukeIntake.getInstance().intakeInAuto()))
+                    )
                 ));
 
                 backAction = new ParallelAction(Arrays.asList(
                     drive_back_path,
-                    new SeriesAction(Arrays.asList(new DelayAction(0.2), new GetReadyToShootAction()))
+                    new SeriesAction(Arrays.asList(new DelayAction(0.1), new GetReadyToShootAction()))
                 ));
                 break;
 
@@ -72,7 +75,7 @@ public class ActionsGenerator {
                     drive_back_path,
                     new SeriesAction(Arrays.asList(
                         new LambdaAction(() -> LukeIntake.getInstance().intakeInAuto()), 
-                        new DelayAction(0.2),
+                        new DelayAction(0.1),
                         new GetReadyToShootAction()))
                 ));
                 break;
@@ -93,7 +96,7 @@ public class ActionsGenerator {
                     drive_back_path,
                     new SeriesAction(Arrays.asList(
                         new LambdaAction(() -> LukeIntake.getInstance().intakeInAuto()), 
-                        new DelayAction(0.2),
+                        new DelayAction(0.1),
                         new GetReadyToShootAction()))
                 ));
                 break;
@@ -236,7 +239,7 @@ public class ActionsGenerator {
 
         if(shootAfter) {
             shoots = new SeriesAction(Arrays.asList(
-                    new DelayAction(0.2),
+                    new DelayAction(0.1),
                     new GetReadyToShootAction()));
         } else {
             shoots = new SeriesAction(Arrays.asList(
@@ -280,7 +283,7 @@ public class ActionsGenerator {
         return new ParallelAction(Arrays.asList(
             drives,
             new SeriesAction(Arrays.asList(
-                new DelayAction(0.2),
+                new DelayAction(0.1),
                 new GetReadyToShootAction()))
         ));
     }

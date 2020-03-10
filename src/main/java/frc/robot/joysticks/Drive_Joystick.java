@@ -24,21 +24,21 @@ public class Drive_Joystick implements IDrive_Joystick {
 
     @Override
     public double getTurn(){
-        return mDriverJoystick.getRawAxis(4);//4 for xbox 2 for ps4
+        return mDriverJoystick.getRawAxis(2);//4 for xbox 2 for ps4
     }
 
     @Override
     public double getHDriveRight() {
-        return mDriverJoystick.getRawAxis(3);//3 for xbox 4 for ps4
+        return mDriverJoystick.getRawAxis(4);//3 for xbox 4 for ps4
     }
 
     @Override
     public double getHDriveLeft() {
-        return -mDriverJoystick.getRawAxis(2);//2 for xbox 3 for ps4
+        return -mDriverJoystick.getRawAxis(3);//2 for xbox 3 for ps4
     }
 
     @Override
-    public boolean isAutoAimming() {
+    public boolean isShooting() {
         return mDriverJoystick.getRawButton(6);//3 for xbox
     }
 

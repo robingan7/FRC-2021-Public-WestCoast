@@ -15,9 +15,23 @@ public interface IOperator_Joystick{
 
     double getElevator();
 
-    double getIntake();
+    boolean isIntake();
 
     boolean isReversePasser();
+
+    boolean isShooting();
+
+    boolean turretRight();
+
+    boolean turretLeft();
+
+    boolean isReverseIntake();
+
+    boolean isTurretForceStop();
+
+    boolean isHighSpeedShot();
+
+    boolean isLowSpeedShot();
 
     boolean isAutoAimming();
 }

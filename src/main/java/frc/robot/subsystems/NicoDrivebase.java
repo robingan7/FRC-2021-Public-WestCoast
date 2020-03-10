@@ -222,7 +222,7 @@ public class NicoDrivebase extends Subsystem_Cycle {
 			driveState = DriveState.TELEOP;
 		}
 		moveValue = scaleJoystickValues(moveValue);
-		rotateValue = scaleJoystickValues(rotateValue) * 0.8;
+		rotateValue = scaleJoystickValues(rotateValue);
 
 		double leftMotorSpeed;
 		double rightMotorSpeed;
@@ -522,7 +522,6 @@ public class NicoDrivebase extends Subsystem_Cycle {
 		
 		feedData_.xDisplacment = Utility.meterToInch(gyroSensor.getDisplacementY());
 		feedData_.yDisplacement = Utility.meterToInch(gyroSensor.getDisplacementX());
-
 	}
 
 	@Override

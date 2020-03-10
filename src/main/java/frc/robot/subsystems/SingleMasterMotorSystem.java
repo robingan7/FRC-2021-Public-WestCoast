@@ -21,8 +21,15 @@ public abstract class SingleMasterMotorSystem extends Subsystem_Cycle {
         constants_ = constants;
         master_ = MotorUtility.createTalon(constants_.kMasterConstants.id);
         slaves_ = new VictorSPX[constants_.kSlaveConstants.length];
+		master_.configFactoryDefault();
+        MotorUtility.checkError(master_.configOpenloopRamp(constants_.kRampRate, Constants.kLongCANTimeoutMs),
+                constants_.kName + ": Could not set voltage ramp rate: ");
 
-        MotorUtility.checkError(master_.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute),
+        master_.setInverted(constants_.kMasterConstants.invert_motor);
+        master_.setNeutralMode(NeutralMode.Brake);
+        master_.setSensorPhase(constants_.kMasterConstants.invert_sensor_phase);
+
+        /*MotorUtility.checkError(master_.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute),
                 constants_.kName + ": Could not detect encoder: ");
 
         /*
@@ -30,7 +37,7 @@ public abstract class SingleMasterMotorSystem extends Subsystem_Cycle {
                 constants_.kName + ": Could not enable forward soft limit: ");
 
         MotorUtility.checkError(master_.configReverseSoftLimitEnable(true, Constants.kLongCANTimeoutMs),
-                constants_.kName + ": Could not enable reverse soft limit: ");*/
+                constants_.kName + ": Could not enable reverse soft limit: ");
 
         MotorUtility.checkError(master_.config_kP(Constants.kSlotIdx, constants_.kKp, Constants.kLongCANTimeoutMs),
                 constants_.kName + ": could not set kP: ");
@@ -58,12 +65,6 @@ public abstract class SingleMasterMotorSystem extends Subsystem_Cycle {
 
         MotorUtility.checkError(master_.configPeakCurrentDuration(constants_.kPeakCurrentDuration),
                 constants_.kName + ": Could not set peak current duration.");
-       
-        master_.setInverted(constants_.kMasterConstants.invert_motor);
-
-        master_.setNeutralMode(NeutralMode.Brake);
-        
-        master_.setSensorPhase(constants_.kMasterConstants.invert_sensor_phase);
 
         //-----------config didn't use in 2019 season ------------
 
@@ -87,9 +88,6 @@ public abstract class SingleMasterMotorSystem extends Subsystem_Cycle {
 
         MotorUtility.checkError(master_.configAllowableClosedloopError(kPositionPIDSlot, constants_.kPositionDeadband, Constants.kLongCANTimeoutMs),
                 constants_.kName + ": Could not set deadband: ");
-
-        MotorUtility.checkError(master_.configOpenloopRamp(constants_.kRampRate, Constants.kLongCANTimeoutMs),
-                constants_.kName + ": Could not set voltage ramp rate: ");
 
         MotorUtility.checkError(master_.configClosedloopRamp(constants_.kRampRate, Constants.kLongCANTimeoutMs),
                 constants_.kName + ": Could not set closed loop ramp rate: ");
@@ -192,7 +190,7 @@ public abstract class SingleMasterMotorSystem extends Subsystem_Cycle {
             master_.set(ControlMode.Position, feedData_.feedforward);
         } else {
             master_.set(ControlMode.PercentOutput, feedData_.feedforward);
-        } 
+        }
     }
 
     public synchronized void setSetpointMotionMagic(double units) {

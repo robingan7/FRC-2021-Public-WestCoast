@@ -58,6 +58,6 @@ public class XitingJinClimber extends Subsystem_Cycle {
     
     @Override
     public void move_subsystem() {
-        master.set(ControlMode.PercentOutput, feedData_.feedforward);
+        master.set(ControlMode.PercentOutput, -feedData_.feedforward);
     }
 }

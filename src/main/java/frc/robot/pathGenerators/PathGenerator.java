@@ -16,7 +16,7 @@ public class PathGenerator {
             if(isEmptyPath) {
                 pathIn = new Path(WayPoints.to_oppo_cell_3);
             } else {
-                pathIn.addPoint(WayPoints.to_oppo_cell_3, 120);
+                pathIn.addPoint(WayPoints.to_oppo_cell_3, 90);
             }
             pathIn.addPoint(WayPoints.kBeforeAutoShootingPoint, 120);
             pathIn.addPoint(WayPoints.kAutoShootingPoint, 120);
@@ -67,12 +67,12 @@ public class PathGenerator {
             if(pathIn == null) {
                 return pathIn;
             }
-            pathIn.addPoint(WayPoints.to_front_barrier_1, 120);
-            pathIn.addPoint(WayPoints.to_front_barrier_2, 120);
+            pathIn.addPoint(WayPoints.to_front_barrier_1, 60);
+            pathIn.addPoint(WayPoints.to_front_barrier_2, 60);
         } else {
             pathIn = new Path(WayPoints.to_front_barrier_2);
-            pathIn.addPoint(WayPoints.to_front_barrier_1, 120);
-            pathIn.addPoint(WayPoints.kAutoShootingPoint, 120);
+            pathIn.addPoint(WayPoints.to_front_barrier_1, 90);
+            pathIn.addPoint(WayPoints.kAutoShootingPoint, 90);
         }
 
         return pathIn;
@@ -104,11 +104,11 @@ public class PathGenerator {
             if(pathIn == null) {
                 return pathIn;
             }
-            pathIn.addPoint(WayPoints.to_back_barrier_1, 120);
-            pathIn.addPoint(WayPoints.to_back_barrier_2, 120);
+            pathIn.addPoint(WayPoints.to_back_barrier_1, 90);
+            pathIn.addPoint(WayPoints.to_back_barrier_2, 90);
         } else {
             pathIn = new Path(WayPoints.to_back_barrier_2);
-            pathIn.addPoint(WayPoints.to_back_barrier_1, 120);
+            pathIn.addPoint(WayPoints.to_back_barrier_1, 90);
 
             if(shootAfter) {
                 pathIn.addPoint(WayPoints.kAutoShootingPoint, 120);
@@ -127,12 +127,12 @@ public class PathGenerator {
             if(!isFromBackBarrier){
                 pathIn.addPoint(WayPoints.to_trench_1, 60);
             }
-            pathIn.addPoint(WayPoints.to_trench_1_add, 60);
-            pathIn.addPoint(WayPoints.to_trench_2, 60);
-            pathIn.addPoint(WayPoints.to_trench_3, 60);
+            pathIn.addPoint(WayPoints.to_trench_1_add, 90);
+            pathIn.addPoint(WayPoints.to_trench_2, 100);
+            pathIn.addPoint(WayPoints.to_trench_3, 100);
         } else {
             pathIn = new Path(WayPoints.to_trench_3);
-            pathIn.addPoint(WayPoints.kAutoShootingPoint, 60);
+            pathIn.addPoint(WayPoints.kAutoShootingPoint, 100);
         }
 
         return pathIn;
@@ -141,10 +141,10 @@ public class PathGenerator {
     public static Path getTrenchFull(Path pathIn, boolean isBack, boolean isFromBackBarrier) {
         if(!isBack) {
             pathIn = getTrenchHalf(pathIn, false, isFromBackBarrier);
-            pathIn.addPoint(WayPoints.to_trench_4, 60);
+            pathIn.addPoint(WayPoints.to_trench_4, 90);
         } else {
             pathIn = new Path(WayPoints.to_trench_4);
-            pathIn.addPoint(WayPoints.kAutoShootingPoint, 60);
+            pathIn.addPoint(WayPoints.kAutoShootingPoint, 90);
         }
 
         return pathIn;

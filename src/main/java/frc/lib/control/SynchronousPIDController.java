@@ -309,13 +309,6 @@ public class SynchronousPIDController {
     return m_Kp * m_positionError + m_Ki * m_totalError + m_Kd * m_velocityError;
   }
 
-  private double limit(double input) {
-    if(Math.abs(input) > 0.3) {
-      return Math.copySign(0.3, input);
-    }
-
-    return input;
-  }
   /**
    * Resets the previous error and the integral term.
    */

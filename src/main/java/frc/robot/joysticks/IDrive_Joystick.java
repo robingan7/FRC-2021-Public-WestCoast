@@ -14,7 +14,7 @@ public interface IDrive_Joystick{
 
     double getHDriveLeft();
 
-    boolean isAutoAimming();
+    boolean isShooting();
 
     boolean isSwitchHood();
 }

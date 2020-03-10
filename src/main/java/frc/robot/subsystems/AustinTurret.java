@@ -25,6 +25,7 @@ public class AustinTurret extends SingleMasterMotorSystem {
 	private double pidGoal;
 	private double angleOffset;
 	private double prevRelativePos;
+	private boolean isForceStop;
 
     private Limelight limelight = Limelight.getInstance();
 	private NicoDrivebase drive = NicoDrivebase.getInstance();
@@ -39,6 +40,7 @@ public class AustinTurret extends SingleMasterMotorSystem {
         @Override
         public void onLoop(double timestamp) {
 			synchronized (AustinTurret.this) {
+				
 				switch(turretState) {
 					case SET_POINT:
 						setAngle(false);
@@ -52,6 +54,7 @@ public class AustinTurret extends SingleMasterMotorSystem {
 					default:
 						System.out.println("Invalid turret state: " + turretState);	
 				}
+				//System.out.println("in: " + limelight.xOffset());
 			}
 			
         }
@@ -66,8 +69,8 @@ public class AustinTurret extends SingleMasterMotorSystem {
 		super(Constants.kTurret);
 		setState(TurretState.SET_POINT);
 		setPointState = SetPointState.NORMAL;
-		angleController = new SynchronousPIDController(constants_.kKp, constants_.kKi, constants_.kKd);//0.022, 0.000015, 0.002
-		limelightController = new SynchronousPIDController(0.025, 0.00007, 0.0003);
+		angleController = new SynchronousPIDController(0.02, 0, 0.0005);//0.022, 0.00001, 0.0015
+		limelightController = new SynchronousPIDController(0.02, 0, 0.0005);//0.025, 0.00007, 0.0003
 		//angleController.enableContinuousInput(-180, 180);
 		angleController.setTolerance(0.01);
 		limelightController.enableContinuousInput(-29.8, 29.8);
@@ -75,6 +78,7 @@ public class AustinTurret extends SingleMasterMotorSystem {
 		pidGoal = 0;
 		angleOffset = 0;
 		prevRelativePos = 0;
+		isForceStop = false;
 	}
 
 	public enum TurretState {
@@ -96,7 +100,7 @@ public class AustinTurret extends SingleMasterMotorSystem {
 		double actualDesire = angle_drivebase + angleOffset;
 
 		if(prevState == TurretState.VISION) {
-			angleOffset = -(current - prevRelativePos + angle_drivebase);
+			angleOffset = (current - prevRelativePos + angle_drivebase);
 			//System.out.println("Angle Offset: " + angleOffset + " --- " + current + " --- " + prevRelativePos);
 		}
 		prevState = turretState;
@@ -136,10 +140,23 @@ public class AustinTurret extends SingleMasterMotorSystem {
 			goal = Constants.kTurretMaxAngle;
 		}
 
-		//System.out.println(current + " --- "+ goal);
+		double output = limit(angleController.calculate(current, goal));
+		//System.out.println(current + " --- "+ goal + "output " + output);
 
-		setOpenLoop(angleController.calculate(current, goal));
+		setOpenLoop(output);
 		isReachGoal(current, goal, isHoming);
+	}
+
+	private double limit(double input) {
+		if(Math.abs(input) > 0.3) {
+		  return Math.copySign(0.3, input);
+		}
+	
+		return input;
+	}
+
+	public synchronized void setForcedStop(boolean stop) {
+		isForceStop = stop;
 	}
 
 	private double deadZoneLimit(double desire, double actual_desire) {
@@ -164,7 +181,7 @@ public class AustinTurret extends SingleMasterMotorSystem {
 		return desire;
 	}
 
-	private void setLimelightAngle() {
+	public synchronized void setLimelightAngle() {
 		prevState = TurretState.VISION;
 		setOpenLoop(limelightController.calculate(limelight.xOffset(), 0));
 	}

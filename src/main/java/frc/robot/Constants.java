@@ -190,7 +190,7 @@ public class Constants {
 
         kClimber.kCruiseVelocity = 300; //should be 3000
         kClimber.kAcceleration = 300; // should be 3000
-        kClimber.kRampRate = 0.005; // s
+        kClimber.kRampRate = 0; // s
         kClimber.kContinuousCurrentLimit = 14; // amps
         kClimber.kPeakCurrentLimit = 40; // amps
         kClimber.kPeakCurrentDuration = 14; // milliseconds
@@ -202,7 +202,7 @@ public class Constants {
     // Intake
     public static final int kIntakeBallBlockerId = 7;
 
-    public static final double kIntakePercentageIntake = 0.25;
+    public static final double kIntakePercentageIntake = 0.2;
     public static final double kIntakePercentagePasser = 0.35;
     public static final double kIntakePercentageMaxUpper = 0.25;
     public static final double kIntakePercentageMaxBottom = 0.25;
@@ -251,7 +251,7 @@ public class Constants {
 
         kIntake.kCruiseVelocity = 200; // should be 2000
         kIntake.kAcceleration = 300; // should be 3000
-        kIntake.kRampRate = 0.005; // s
+        kIntake.kRampRate = 0; // s
         kIntake.kContinuousCurrentLimit = 20; // amps
         kIntake.kPeakCurrentLimit = 40; // amps
         kIntake.kPeakCurrentDuration = 20; // milliseconds
@@ -261,9 +261,9 @@ public class Constants {
     }*/
 
     // Shooter
-    public static final double kAutoShootingDuration = 3;
-    public static final double kShooterReverseSpeed = -0.6;
-    public static final double kAutoShootingPercentage = 0.7;
+    public static final double kAutoShootingDuration = 1.7;
+    public static final double kShooterReverseSpeed = -0.5;
+    public static final double kAutoShootingPercentage = 0.5;//0.5 is good for trench
     public static final int kShooterServoId = 0;
     public static double kMaxServoAngle = 0.95;
     public static double kMinServoAngle = 0.5;
@@ -356,13 +356,13 @@ public class Constants {
 
         kTurret.kCruiseVelocity = 20; // should be 2000
         kTurret.kAcceleration = 30; // should be 3000
-        kTurret.kRampRate = 0.005; // s
+        kTurret.kRampRate = 0; // s
         kTurret.kContinuousCurrentLimit = 20; // amps
         kTurret.kPeakCurrentLimit = 40; // amps
         kTurret.kPeakCurrentDuration = 20; // milliseconds
 
-        kTurret.kNominalOutputForward = 0.1;
-        kTurret.kNominalOutputReverse = 0.1;
+        kTurret.kNominalOutputForward = 0;
+        kTurret.kNominalOutputReverse = 0;
     }
 
     // Wheel of Fortune
@@ -411,7 +411,7 @@ public class Constants {
 
         kWheelOfFortune.kCruiseVelocity = 200; // should be 2000
         kWheelOfFortune.kAcceleration = 300; // should be 3000
-        kWheelOfFortune.kRampRate = 0.005; // s
+        kWheelOfFortune.kRampRate = 0; // s
         kWheelOfFortune.kContinuousCurrentLimit = 20; // amps
         kWheelOfFortune.kPeakCurrentLimit = 40; // amps
         kWheelOfFortune.kPeakCurrentDuration = 20; // milliseconds

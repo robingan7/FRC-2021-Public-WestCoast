@@ -42,8 +42,8 @@ public class MainControlBoard implements IMainControlBoard{
     }
 
     @Override
-    public boolean isAutoAimming() {
-        return mIOperator_Joystick.isAutoAimming();
+    public boolean isShooting() {
+        return mIOperator_Joystick.isShooting();
     }
 
     @Override
@@ -87,8 +87,13 @@ public class MainControlBoard implements IMainControlBoard{
     }
 
     @Override
-    public double getIntake() {
-        return mIOperator_Joystick.getIntake();
+    public boolean isIntake() {
+        return mIOperator_Joystick.isIntake();
+    }
+
+    @Override
+    public boolean isReverseIntake() {
+        return mIOperator_Joystick.isReverseIntake();
     }
 
     @Override
@@ -100,4 +105,35 @@ public class MainControlBoard implements IMainControlBoard{
     public boolean isSwitchHood() {
         return mDrive_Joystick.isSwitchHood();
     }
+
+    @Override
+    public boolean turretRight() {
+        return mIOperator_Joystick.turretRight();
+    }
+
+    @Override
+    public boolean turretLeft() {
+        return mIOperator_Joystick.turretLeft();
+    }
+
+    @Override
+    public boolean isTurretForceStop() {
+        return mIOperator_Joystick.isTurretForceStop();
+    }
+
+    @Override
+    public boolean isHighSpeedShot() {
+        return mIOperator_Joystick.isHighSpeedShot();
+    }
+
+    @Override
+    public boolean isLowSpeedShot() {
+        return mIOperator_Joystick.isLowSpeedShot();
+    }
+
+    @Override
+    public boolean isAutoAimming() {
+        return mIOperator_Joystick.isAutoAimming();
+    }
+
 }

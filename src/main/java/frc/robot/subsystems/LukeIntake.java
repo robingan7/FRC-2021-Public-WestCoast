@@ -91,6 +91,10 @@ public class LukeIntake extends Subsystem_Cycle {
         }
     }
 
+    public synchronized void rollerInverse() {
+        setOpenLoop(-0.75, 0, 0, 0);
+    }
+
     public synchronized void setOpenLoop(double percentageRoller, double percentagePasser, double percentageUpper, double percentageBottom) {
         if(intakeState != IntakeState.PERCENT_OUTPUT) {
             intakeState = IntakeState.PERCENT_OUTPUT;
@@ -132,11 +136,13 @@ public class LukeIntake extends Subsystem_Cycle {
     }
 
     public synchronized void reverseIntakeInAuto() {
-        controlIntake(-0.4, false);
+        setOpenLoop(0.0, Constants.kIntakePercentagePasserInverse, 
+                    Constants.kIntakePercentageMaxUpperInverse, Constants.kIntakePercentageMaxBottomInverse);
     }
 
     public synchronized void intakeInAuto() {
-        controlIntake(0.4, false);
+        setOpenLoop(Constants.kIntakePercentageIntake, Constants.kIntakePercentagePasser, 
+                    Constants.kIntakePercentageMaxUpper, Constants.kIntakePercentageMaxBottom);
     }
 
     private void passerCurrentLimit() {

@@ -26,7 +26,7 @@ public class Operator_Joystick implements IOperator_Joystick{
 
     @Override
     public boolean isHomeTurret() {
-        return mOperatorJoystick.getRawButton(7);
+        return mOperatorJoystick.getRawButton(9);
     }
 
     @Override
@@ -50,16 +50,53 @@ public class Operator_Joystick implements IOperator_Joystick{
     }
 
     @Override
-    public double getIntake() {
-        return mOperatorJoystick.getRawAxis(1);
+    public boolean isIntake() {
+        return mOperatorJoystick.getRawButton(1);
     }
 
     @Override
     public boolean isReversePasser() {
+        return mOperatorJoystick.getRawButton(2);
+    }
+
+    @Override
+    public boolean isReverseIntake() {
+        return mOperatorJoystick.getRawButton(3);//3 for xbox
+    }
+
+    @Override
+    public boolean turretRight() {
         return mOperatorJoystick.getRawButton(6);
     }
 
-    public boolean isAutoAimming() {
-        return mOperatorJoystick.getRawButton(6);//3 for xbox
+    @Override
+    public boolean turretLeft() {
+        return mOperatorJoystick.getRawButton(5);
     }
+
+    @Override
+    public boolean isShooting() {
+        return mOperatorJoystick.getRawAxis(4) >= 0.5;
+    }
+
+    @Override
+    public boolean isTurretForceStop() {
+        return mOperatorJoystick.getRawButton(2);
+    }
+
+    @Override
+    public boolean isHighSpeedShot() {
+        return mOperatorJoystick.getPOV(0) == 0;
+    }
+
+    @Override
+    public boolean isLowSpeedShot() {
+        return mOperatorJoystick.getPOV(0) == 180;
+    }
+
+    @Override
+    public boolean isAutoAimming() {
+        return mOperatorJoystick.getRawButton(4);
+    }
+
 }
