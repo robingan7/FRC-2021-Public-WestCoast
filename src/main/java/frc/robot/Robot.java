@@ -195,10 +195,10 @@ public class Robot extends TimedRobot {
         shooter_.switchHood();
       }
 
-      if(turretMoveRightActivator.canBeActived(isTurretMoveRight, timestamp)) {
-        //turret_.addAngleOffset(Constants.kTurretFineTuneAngle);
-      } else if(turretMoveLeftActivator.canBeActived(isTurretMoveLeft, timestamp)) {
-        //turret_.addAngleOffset(-Constants.kTurretFineTuneAngle);
+      if(turretMoveRightActivator.canBeActived(isTurretRight, timestamp)) {
+        turret_.addAngleOffset(Constants.kTurretFineTuneAngle);
+      } else if(turretMoveLeftActivator.canBeActived(isTurretLeft, timestamp)) {
+        turret_.addAngleOffset(-Constants.kTurretFineTuneAngle);
       }
 
       drivebase_.arcadeDrive(-speed, turn, hDriveAxis);

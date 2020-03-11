@@ -100,7 +100,7 @@ public class AustinTurret extends SingleMasterMotorSystem {
 		double actualDesire = angle_drivebase + angleOffset;
 
 		if(prevState == TurretState.VISION) {
-			angleOffset = (current - prevRelativePos + angle_drivebase);
+			//angleOffset = (current - prevRelativePos + angle_drivebase);
 			//System.out.println("Angle Offset: " + angleOffset + " --- " + current + " --- " + prevRelativePos);
 		}
 		prevState = turretState;
