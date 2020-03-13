@@ -52,4 +52,9 @@ public class Drive_Joystick implements IDrive_Joystick {
         return mDriverJoystick.getRawAxis(0);
     }
 
+    @Override
+    public boolean isLowSpeedShot() {
+        return mDriverJoystick.getPOV(0) == 180;
+    }
+
 }

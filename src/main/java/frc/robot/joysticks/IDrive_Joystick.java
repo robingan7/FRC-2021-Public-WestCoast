@@ -17,4 +17,6 @@ public interface IDrive_Joystick{
     boolean isShooting();
 
     boolean isSwitchHood();
+
+    boolean isLowSpeedShot();
 }

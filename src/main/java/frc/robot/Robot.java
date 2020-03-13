@@ -175,6 +175,7 @@ public class Robot extends TimedRobot {
             turret_.setState(TurretState.VISION);
             shooter_.shootInAuto();
           } else if(isLowSpeedShot) {
+            turret_.setState(TurretState.VISION);
             shooter_.shootInLowSpeed();
           } else {
             turret_.setState(TurretState.SET_POINT);
@@ -182,7 +183,7 @@ public class Robot extends TimedRobot {
           }
       }
 
-      if(isIntake) {
+      if(isShooting) {
         intake_.intakeInAuto();
       } else if(isReverseIntake) {
         intake_.reverseIntakeInAuto();

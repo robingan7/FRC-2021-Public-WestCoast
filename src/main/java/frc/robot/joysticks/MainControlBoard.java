@@ -43,7 +43,7 @@ public class MainControlBoard implements IMainControlBoard{
 
     @Override
     public boolean isShooting() {
-        return mIOperator_Joystick.isShooting();
+        return mDrive_Joystick.isShooting();
     }
 
     @Override
@@ -128,7 +128,7 @@ public class MainControlBoard implements IMainControlBoard{
 
     @Override
     public boolean isLowSpeedShot() {
-        return mIOperator_Joystick.isLowSpeedShot();
+        return mDrive_Joystick.isLowSpeedShot();
     }
 
     @Override

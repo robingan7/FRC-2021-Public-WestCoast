@@ -132,6 +132,7 @@ public class NicoDrivebase extends Subsystem_Cycle {
 	};
 	
 	private NicoDrivebase() {
+
 		//shifter = new Solenoid(Constants.kGearShifter);
 		leftMasterTalon = MotorUtility.createTalon(Constants.kLeftDriveMasterId);
 		rightMasterTalon = MotorUtility.createTalon(Constants.kRightDriveMasterId);
@@ -144,6 +145,13 @@ public class NicoDrivebase extends Subsystem_Cycle {
 		leftSlave2Talon = MotorUtility.createVictor(Constants.kLeftDriveSlaveBId);
 		rightSlaveTalon = MotorUtility.createVictor(Constants.kRightDriveSlaveAId);
 		rightSlave2Talon = MotorUtility.createVictor(Constants.kRightDriveSlaveBId);
+		
+		leftMasterTalon.configFactoryDefault();
+		rightMasterTalon.configFactoryDefault();
+		leftSlaveTalon.configFactoryDefault();
+		rightSlaveTalon.configFactoryDefault();
+		leftSlave2Talon.configFactoryDefault();
+		rightSlave2Talon.configFactoryDefault();
 		configMotors();
 
 		driveState = DriveState.DONE;
@@ -298,7 +306,6 @@ public class NicoDrivebase extends Subsystem_Cycle {
 	}
 
 	private void configMotors() {
-		
 		leftSlaveTalon.follow(leftMasterTalon);
 		leftSlave2Talon.follow(leftMasterTalon);
 		rightSlaveTalon.follow(rightMasterTalon);
