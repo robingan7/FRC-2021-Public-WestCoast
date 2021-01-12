@@ -91,20 +91,23 @@ import frc.lib.math.Translation2d;
     };
 
    /**-------------------Bounce Path----------------- */
-   public static final Translation2d bounce_star1_1 = new Translation2d(75, 100);
+   public static final Translation2d[] bounce_star1_1 = {new Translation2d(75, 100)};
    public static final Translation2d bounce_star1 = new Translation2d(90, 150);
-   public static final Translation2d bounce_star2_1 = new Translation2d(115, 80);
-   public static final Translation2d bounce_star2_2 = new Translation2d(135, 45);
-   public static final Translation2d bounce_star2_3 = new Translation2d(150, 30);
-   public static final Translation2d bounce_star2_4 = new Translation2d(165, 45);
-   public static final Translation2d bounce_star2_5 = new Translation2d(175, 55);
+   public static final Translation2d[] bounce_star2_1 = {
+     new Translation2d(115, 80),
+     new Translation2d(135, 45),
+     new Translation2d(165, 45),
+     new Translation2d(175, 55)
+    };
    public static final Translation2d bounce_star2 = new Translation2d(180, 150);
-   public static final Translation2d bounce_star3_1 = new Translation2d(190, 45);
-   public static final Translation2d bounce_star3_2 = new Translation2d(210, 35);
-   public static final Translation2d bounce_star3_3 = new Translation2d(240, 35);
-   public static final Translation2d bounce_star3_4 = new Translation2d(255, 40);
+   public static final Translation2d[] bounce_star3_1 = {
+     new Translation2d(190, 45),
+     new Translation2d(210, 35),
+     new Translation2d(240, 35),
+     new Translation2d(255, 40)
+    };
    public static final Translation2d bounce_star3 = new Translation2d(270, 150);
-   public static final Translation2d bounce_star4_1 = new Translation2d(285, 120);
+   public static final Translation2d[] bounce_star4_1 = {new Translation2d(285, 120)};
    public static final Translation2d bounce_end = new Translation2d(330, 90);
 
    /*-----------TWO_ON_OPPO_TRENCH--------------*/

@@ -13,8 +13,7 @@ import java.util.Optional;
 public class AutoChooser {
     public enum StartingPosition {
         FACE_OPPO_TRENCH, FACE_FRONT_BARRIER, FACE_POWER_PORT, PATHA, PATHB, 
-
-        
+        Barrel_Racing_Path, Slalom_Path, Bounce_Path
     }
 
     public enum BeforeFirstShoot {
@@ -23,6 +22,13 @@ public class AutoChooser {
         COMPLETE_STEAL, 
         FRONT_BARRIER,
         BACK_BARRIER,
+        PATHA_R, 
+        PATHA_B, 
+        PATHB_R, 
+        PATHB_B, 
+        Barrel_Racing_Path, 
+        Slalom_Path, 
+        Bounce_Path,
         DO_NOTHING
     }
 
@@ -72,6 +78,11 @@ public class AutoChooser {
         startPositionChooser_.setDefaultOption("FACE_OPPO_TRENCH", StartingPosition.FACE_OPPO_TRENCH);
         startPositionChooser_.addOption("FACE_FRONT_BARRIER", StartingPosition.FACE_FRONT_BARRIER);
         startPositionChooser_.addOption("FACE_POWER_PORT", StartingPosition.FACE_POWER_PORT);
+        startPositionChooser_.addOption("PATHA", StartingPosition.PATHA);
+        startPositionChooser_.addOption("PATHB", StartingPosition.PATHB);
+        startPositionChooser_.addOption("Barrel_Racing_Path", StartingPosition.Barrel_Racing_Path);
+        startPositionChooser_.addOption("Slalom_Path", StartingPosition.Slalom_Path);
+        startPositionChooser_.addOption("Bounce_Path", StartingPosition.Bounce_Path);
         SmartDashboard.putData("Starting Position", startPositionChooser_);
 
         firstShooterChooser = new SendableChooser<>();
@@ -174,6 +185,21 @@ public class AutoChooser {
             case FACE_FRONT_BARRIER:
                 setInitialPoint(WayPoints.kFaceFrontBarrier);
                 break;
+            case PATHA:
+                setInitialPoint(WayPoints.kGalactic_Search_ChallengeA);
+                break;
+            case PATHB:
+                setInitialPoint(WayPoints.kGalactic_Search_ChallengeB);
+                break;
+            case Barrel_Racing_Path:
+                setInitialPoint(WayPoints.kBarrel);
+                break;
+            case Slalom_Path:
+                setInitialPoint(WayPoints.kSlalom);
+                break;  
+            case Bounce_Path:
+                setInitialPoint(WayPoints.kBounce);
+                break;       
             default:
                 setInitialPoint(WayPoints.kFaceOppoTrench);
                 break;

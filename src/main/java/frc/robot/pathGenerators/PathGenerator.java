@@ -2,6 +2,7 @@ package frc.robot.pathGenerators;
 
 import frc.robot.WayPoints;
 import frc.lib.control.Path;
+import frc.lib.math.Translation2d;
 import frc.robot.auton.AutoChooser;
 
 public class PathGenerator {
@@ -148,6 +149,99 @@ public class PathGenerator {
         }
 
         return pathIn;
+    }
+
+    public static Path getPathA_R() {
+        Path path = new Path(WayPoints.kGalactic_Search_ChallengeA);
+        path.addPoint(WayPoints.path_A_Red1, 100);
+        path.addPoint(WayPoints.path_A_Red2, 100);
+        path.addPoint(WayPoints.path_A_Red3, 100);
+        path.addPoint(WayPoints.path_A_Red_end, 100);
+        return path;
+    }
+
+    public static Path getPathA_B() {
+        Path path = new Path(WayPoints.kGalactic_Search_ChallengeA);
+        path.addPoint(WayPoints.path_A_Blue1, 100);
+        path.addPoint(WayPoints.path_A_Blue2, 100);
+        path.addPoint(WayPoints.path_A_Blue3, 100);
+        path.addPoint(WayPoints.path_A_Blue_end, 100);
+        return path;
+    }
+
+    public static Path getPathB_R() {
+        Path path = new Path(WayPoints.kGalactic_Search_ChallengeB);
+        path.addPoint(WayPoints.path_B_Red1, 100);
+        path.addPoint(WayPoints.path_B_Red2, 100);
+        path.addPoint(WayPoints.path_B_Red3, 100);
+        path.addPoint(WayPoints.path_B_Red_end, 100);
+        return path;
+    }
+
+    public static Path getPathB_B() {
+        Path path = new Path(WayPoints.kGalactic_Search_ChallengeB);
+        path.addPoint(WayPoints.path_B_Blue1, 100);
+        path.addPoint(WayPoints.path_B_Blue2, 100);
+        path.addPoint(WayPoints.path_B_Blue3, 100);
+        path.addPoint(WayPoints.path_B_Blue_end, 100);
+        return path;
+    }
+
+    public static Path getBarrel() {
+        Path path = new Path(WayPoints.kBarrel);
+
+        for(Translation2d point : WayPoints.barrel_points) {
+            path.addPoint(point, 100);
+        }
+        return path;
+    }
+
+    public static Path getSlatom() {
+        Path path = new Path(WayPoints.kSlalom);
+
+        for(Translation2d point : WayPoints.slalom_points) {
+            path.addPoint(point, 100);
+        }
+        return path;
+    }
+
+    public static Path getBounce_toStar1() {
+        Path path = new Path(WayPoints.kBounce);
+        for(Translation2d point : WayPoints.bounce_star1_1) {
+            path.addPoint(point, 100);
+        }
+        path.addPoint(WayPoints.bounce_star1, 100);
+        return path;
+    }
+
+    public static Path getBounce_toStar2() {
+        Path path = new Path(WayPoints.bounce_star1);
+        for(Translation2d point : WayPoints.bounce_star2_1) {
+            path.addPoint(point, 100);
+        }
+        path.addPoint(WayPoints.bounce_star2, 100);
+
+        return path;
+    }
+
+    public static Path getBounce_toStar3() {
+        Path path = new Path(WayPoints.bounce_star2);
+        for(Translation2d point : WayPoints.bounce_star3_1) {
+            path.addPoint(point, 100);
+        }
+        path.addPoint(WayPoints.bounce_star3, 100);
+
+        return path;
+    }
+
+    public static Path getBounce_toEnd() {
+        Path path = new Path(WayPoints.bounce_star3);
+        for(Translation2d point : WayPoints.bounce_star4_1) {
+            path.addPoint(point, 100);
+        }
+        path.addPoint(WayPoints.bounce_end, 100);
+
+        return path;
     }
 
 }

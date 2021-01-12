@@ -109,6 +109,60 @@ public class ActionsGenerator {
                 forwardAction = getBackBarrierActions(AutoChooser.getInitialPoint(), true, false, false);
                 break;
 
+            case PATHA_R:
+                drive_forward_path = new DrivePathAction(PathGenerator.getPathA_R(), false);
+                forwardAction = new ParallelAction(Arrays.asList(
+                    drive_forward_path,
+                    new LambdaAction(() -> LukeIntake.getInstance().intakeInAuto())
+                ));
+                break;
+            case PATHA_B:
+                drive_forward_path = new DrivePathAction(PathGenerator.getPathA_B(), false);
+                forwardAction = new ParallelAction(Arrays.asList(
+                    drive_forward_path,
+                    new LambdaAction(() -> LukeIntake.getInstance().intakeInAuto())
+                ));
+                break;
+            case PATHB_R:
+                drive_forward_path = new DrivePathAction(PathGenerator.getPathB_R(), false);
+                forwardAction = new ParallelAction(Arrays.asList(
+                    drive_forward_path,
+                    new LambdaAction(() -> LukeIntake.getInstance().intakeInAuto())
+                ));
+                break;
+            case PATHB_B:
+                drive_forward_path = new DrivePathAction(PathGenerator.getPathB_B(), false);
+                forwardAction = new ParallelAction(Arrays.asList(
+                    drive_forward_path,
+                    new LambdaAction(() -> LukeIntake.getInstance().intakeInAuto())
+                ));
+                break;
+            case Barrel_Racing_Path:
+                drive_forward_path = new DrivePathAction(PathGenerator.getBarrel(), false);
+                forwardAction = new ParallelAction(Arrays.asList(
+                    drive_forward_path,
+                    new LambdaAction(() -> LukeIntake.getInstance().intakeInAuto())
+                ));
+                break;
+            case Slalom_Path:
+                drive_forward_path = new DrivePathAction(PathGenerator.getSlatom(), false);
+                forwardAction = new ParallelAction(Arrays.asList(
+                    drive_forward_path,
+                    new LambdaAction(() -> LukeIntake.getInstance().intakeInAuto())
+                ));
+                break;
+            case Bounce_Path:
+                drive_forward_path = new DrivePathAction(PathGenerator.getBarrel(), false);
+                forwardAction = new ParallelAction(Arrays.asList(
+                    new SeriesAction(Arrays.asList(
+                        new DrivePathAction(PathGenerator.getBounce_toStar1(), false),
+                        new DrivePathAction(PathGenerator.getBounce_toStar2(), true),
+                        new DrivePathAction(PathGenerator.getBounce_toStar3(), false),
+                        new DrivePathAction(PathGenerator.getBounce_toEnd(), false)
+                    )),
+                    new LambdaAction(() -> LukeIntake.getInstance().intakeInAuto())
+                ));
+                break;
             case DO_NOTHING:
                 break;
 
