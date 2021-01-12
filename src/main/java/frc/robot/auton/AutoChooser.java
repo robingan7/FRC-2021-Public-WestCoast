@@ -12,7 +12,9 @@ import java.util.Optional;
 
 public class AutoChooser {
     public enum StartingPosition {
-        FACE_OPPO_TRENCH, FACE_FRONT_BARRIER, FACE_POWER_PORT
+        FACE_OPPO_TRENCH, FACE_FRONT_BARRIER, FACE_POWER_PORT, PATHA, PATHB, 
+
+        
     }
 
     public enum BeforeFirstShoot {
