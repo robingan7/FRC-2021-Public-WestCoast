@@ -158,7 +158,7 @@ public class ActionsGenerator {
                         new DrivePathAction(PathGenerator.getBounce_toStar1(), false),
                         new DrivePathAction(PathGenerator.getBounce_toStar2(), true),
                         new DrivePathAction(PathGenerator.getBounce_toStar3(), false),
-                        new DrivePathAction(PathGenerator.getBounce_toEnd(), false)
+                        new DrivePathAction(PathGenerator.getBounce_toEnd(), true)
                     )),
                     new LambdaAction(() -> LukeIntake.getInstance().intakeInAuto())
                 ));

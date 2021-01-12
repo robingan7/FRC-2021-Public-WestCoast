@@ -87,7 +87,7 @@ import frc.lib.math.Translation2d;
      new Translation2d(150, 30),
      new Translation2d(100, 45),
      new Translation2d(75, 75),
-     new Translation2d(60-29.5, 90)
+     new Translation2d(60, 90)
     };
 
    /**-------------------Bounce Path----------------- */

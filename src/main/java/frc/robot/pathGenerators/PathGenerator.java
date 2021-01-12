@@ -191,7 +191,7 @@ public class PathGenerator {
         Path path = new Path(WayPoints.kBarrel);
 
         for(Translation2d point : WayPoints.barrel_points) {
-            path.addPoint(point, 100);
+            path.addPoint(point, 50);
         }
         return path;
     }
@@ -200,7 +200,7 @@ public class PathGenerator {
         Path path = new Path(WayPoints.kSlalom);
 
         for(Translation2d point : WayPoints.slalom_points) {
-            path.addPoint(point, 100);
+            path.addPoint(point, 60);
         }
         return path;
     }

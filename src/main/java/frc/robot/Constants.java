@@ -85,7 +85,7 @@ public class Constants {
 	public static final double TeleopAccLimit = 120;
     
     // Autonomous Driving
-	public static final double TrackRadius = 12;
+	public static final double TrackRadius = 15;
 	public static final double kWheelDiameter = 6;
 	public static final double MinimumTurningRadius = 40;
 	public static final double MinPathSpeed = 20;

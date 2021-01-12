@@ -92,6 +92,13 @@ public class AutoChooser {
         firstShooterChooser.addOption("COMPLETE_STEAL", BeforeFirstShoot.COMPLETE_STEAL);
         firstShooterChooser.addOption("FRONT_BARRIER", BeforeFirstShoot.FRONT_BARRIER);
         firstShooterChooser.addOption("BACK_BARRIER", BeforeFirstShoot.BACK_BARRIER);
+        firstShooterChooser.addOption("PATHA_R", BeforeFirstShoot.PATHA_R);
+        firstShooterChooser.addOption("PATHA_B", BeforeFirstShoot.PATHA_B);
+        firstShooterChooser.addOption("PATHB_R", BeforeFirstShoot.PATHB_R);
+        firstShooterChooser.addOption("PATHB_B", BeforeFirstShoot.PATHB_B);
+        firstShooterChooser.addOption("Barrel_Racing_Path", BeforeFirstShoot.Barrel_Racing_Path);
+        firstShooterChooser.addOption("Bounce_Path", BeforeFirstShoot.Bounce_Path);
+        firstShooterChooser.addOption("Slalom_Path", BeforeFirstShoot.Slalom_Path);
         SmartDashboard.putData("First Select", firstShooterChooser);
 
         secondShooterChooser = new SendableChooser<>();
